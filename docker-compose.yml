@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      - OLLAMA_MAX_LOADED_MODELS=3
+      - OLLAMA_NUM_GPU=999
+      - OLLAMA_KEEP_ALIVE=5m
+      - OLLAMA_NO_PRUNE=true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              count: all
+    mem_limit: 32g
+  open-webui-prod:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui-prod
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui-prod:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - ollama
+    restart: always
+  open-webui-dev:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - /home/chris/dev/source/open-webui-dev:/app
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - ollama
+    restart: always
+volumes:
+  ollama:
+  open-webui-prod:
