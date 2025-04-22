@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # setup-ollama.sh
-# Yo, $USER, welcome to the *Dankest Docker Dungeon* in WSL2! Built for Chris’s beastly setup:
+# Yo, $USER, welcome to the *Dankest Docker Dungeon* in WSL2! Built for thrightguy’s beastly setup:
 # - WSL2 on Windows, NVIDIA RTX 4070 (10 GB VRAM free), 64 GB RAM (37.3 GB free).
 # - Scripts in $HOME/dev/Scripts, optional Open WebUI dev in $HOME/dev/source/open-webui-dev.
 # - Continue.dev at /mnt/d/Dev/.continue/config.json (NTFS, Windows vibes).
-# Summons Ollama + Open WebUI (prod), with optional Open WebUI (dev) for CloudToLocalLLM.
-# Preserves ollama/ollama and ghcr.io/open-webui/open-webui:main images. Ping @Grok for your rig + *more memes* like *Drake Hotline Bling* or *Scumbag Steve*!
+# Summons Ollama + Open WebUI (prod), with optional Open WebUI (dev) for development.
+# Preserves ollama/ollama, ghcr.io/open-webui/open-webui:main, and NVIDIA test images. Ping @Grok for your rig + *more memes* like *Drake Hotline Bling* or *One Does Not Simply*!
 
 echo "🦀 Initiating Project *Crab Rave* for $USER in WSL2... Docker, don’t yeet us into 404 hell or we’ll *Rage Comic* you! 🦀"
 
@@ -29,7 +29,7 @@ WEBUI_IMAGE="ghcr.io/open-webui/open-webui:main"
 ENABLE_DEV=""
 
 # Prompt for Open WebUI dev instance
-echo "🤔 Want Open WebUI (dev) at http://localhost:8080 for CloudToLocalLLM hacking? [y/N] *Choose wisely, or face *Spooky Scary Skeletons*!*"
+echo "🤔 Want Open WebUI (dev) at http://localhost:8080 for development? [y/N] *Choose wisely, or face *Spooky Scary Skeletons*!*"
 read -p "Enter choice [y/N]: " dev_choice
 if [ "$dev_choice" = "y" ] || [ "$dev_choice" = "Y" ]; then
     ENABLE_DEV="true"
@@ -111,7 +111,7 @@ echo "🚀 GPU’s ready to yeet those tensors! *RTX 4070 has entered the chat* 
 
 # Clone Open WebUI repo if dev instance is enabled
 if [ "$ENABLE_DEV" = "true" ]; then
-    echo "🕸️ Cloning Open WebUI to $WEBUI_DEV_DIR for CloudToLocalLLM... Much wow, such code, like *Doge* hoarding Dogecoin!"
+    echo "🕸️ Cloning Open WebUI to $WEBUI_DEV_DIR for development... Much wow, such code, like *Doge* hoarding Dogecoin!"
     if [ -d "$WEBUI_DEV_DIR/.git" ]; then
         echo "🤓 Open WebUI repo’s already here. Pulling latest changes like *Success Kid* landing a GitHub star..."
         cd "$WEBUI_DEV_DIR" && git pull origin main
@@ -191,7 +191,7 @@ cat << EOF > "$START_STOP_SCRIPT"
 #!/bin/bash
 
 # start-stop-ollama.sh
-# The *Doge* of container scripts for Chris’s WSL2 beast (RTX 4070, 64 GB RAM, WSL2).
+# The *Doge* of container scripts for thrightguy’s WSL2 beast (RTX 4070, 64 GB RAM, WSL2).
 # Manages Ollama, Open WebUI (prod), and optional Open WebUI (dev). Ping @Grok to tweak for your rig + add *Expanding Brain* memes!
 # Portable with \$HOME paths, uninstall/repair with *Spooky Scary Skeletons* vibes.
 
@@ -276,14 +276,14 @@ stop_containers() {
 uninstall() {
     echo "☢️ Uninstaller activated! Yeeting Ollama, Open WebUI (prod), and $( [ "\$ENABLE_DEV" = "true" ] && echo "Open WebUI (dev)" || echo "no dev instance" ) into the void like *Scumbag Steve*..."
     stop_containers
-    echo "💣 Deleting containers and volumes like it’s a bad TikTok trend..."
+    echo "💣 Deleting containers and volumes like it’s a bad TikTok trend, keeping $OLLAMA_IMAGE and $WEBUI_IMAGE..."
     docker rm -f "\$CONTAINER_NAME_OLLAMA" "\$CONTAINER_NAME_WEBUI_DEV" "\$CONTAINER_NAME_WEBUI_PROD" 2>/dev/null
     docker volume rm "\${COMPOSE_DIR##*/}_ollama" "\${COMPOSE_DIR##*/}_open-webui-prod" 2>/dev/null
     if [ "\$ENABLE_DEV" = "true" ]; then
         read -p "🗑️ Yeet Open WebUI dev repo (\$WEBUI_DEV_DIR) into oblivion? [y/N]: " remove_repo
         if [ "\$remove_repo" = "y" ] || [ "\$remove_repo" = "Y" ]; then
             rm -rf "\$WEBUI_DEV_DIR"
-            echo "💥 Open WebUI dev repo obliterated. *Sad Doge noises*"
+            echo "💥 Open WebUI dev repo obliterated. *Sad Doge* noises."
         fi
     fi
     echo "🪦 Uninstall complete. Only docker-compose.yml remains, like a tombstone in \$COMPOSE_DIR. Want *One Does Not Simply* memes? Ping @Grok!"
@@ -331,7 +331,7 @@ fi
 echo "🎮 Container Control Menu: *Mortal Kombat* edition, *Trollface* smirking!"
 echo "1. Start Ollama, Open WebUI (prod), and $( [ "\$ENABLE_DEV" = "true" ] && echo "Open WebUI (dev)" || echo "no dev instance" )"
 echo "2. Stop Ollama, Open WebUI (prod), and $( [ "\$ENABLE_DEV" = "true" ] && echo "Open WebUI (dev)" || echo "no dev instance" )"
-echo "3. Uninstall setup (nuke it all)"
+echo "3. Uninstall setup (nuke it all, keep images)"
 echo "4. Repair setup (revive the chaos)"
 read -p "Enter choice [1-4]: " action
 case \$action in
@@ -417,9 +417,9 @@ if [ "$ENABLE_DEV" = "true" ]; then
     echo "🌐 Verifying Open WebUI (dev) at http://localhost:8080... *Pls no 404, or I’ll *Rage Comic* cry!*"
     curl -s http://localhost:8080 >/dev/null
     if [ $? -eq 0 ]; then
-        echo "🎉 Open WebUI (dev) is live at http://localhost:8080! *CloudToLocalLLM, let’s get it!* *Drake Hotline Bling* approves!"
+        echo "🎉 Open WebUI (dev) is live at http://localhost:8080! *Development vibes, let’s get it!* *Drake Hotline Bling* approves!"
     else
-        echo "😿 Open WebUI (dev) is down! Check logs with 'docker logs $CONTAINER_NAME_WEBUI_DEV'. *Sad Doge noises*"
+        echo "😿 Open WebUI (dev) is down! Check logs with 'docker logs $CONTAINER_NAME_WEBUI_DEV'. *Sad Doge* noises."
     fi
 fi
 echo "🌐 Verifying Open WebUI (prod) at http://localhost:3000... *Personal vibes, don’t fail me or it’s *Sad Affleck*!*"
@@ -431,12 +431,12 @@ else
 fi
 
 # Continue.dev note
-echo "🪟 Continue.dev config.json is chilling in /mnt/d/Dev/.continue/config.json (NTFS), per Chris’s Windows setup."
+echo "🪟 Continue.dev config.json is chilling in /mnt/d/Dev/.continue/config.json (NTFS), per thrightguy’s Windows setup."
 echo "🚀 No I/O worries, so it stays there like a cursed artifact guarded by *Spooky Scary Skeletons*. Ensure it points to http://localhost:11434 for Ollama."
 echo "💡 Got a different rig? Ping @Grok to tweak this setup for your system and add *more memes* like *One Does Not Simply* or *Trollface* chaos!"
 
 echo "🎆 Setup complete! Ollama, Open WebUI (prod), and $( [ "$ENABLE_DEV" = "true" ] && echo "Open WebUI (dev)" || echo "no dev instance" ) are ready in $COMPOSE_DIR (ext4) with models: ${MODELS[*]}."
-echo "🔥 Access Open WebUI (dev) at http://localhost:8080 for CloudToLocalLLM (if enabled), *Success Kid* style."
+echo "🔥 Access Open WebUI (dev) at http://localhost:8080 for development (if enabled), *Success Kid* style."
 echo "🛋️ Access Open WebUI (prod) at http://localhost:3000 for personal vibes, *Doge* approved."
 echo "🛠️ Tweak dev code in $WEBUI_DEV_DIR (if enabled). *Hack the planet like *Expanding Brain*!*"
 echo "📈 Monitor VRAM with 'nvidia-smi' to keep it under 10 GB, or face the *VRAM reaper* like *Spooky Scary Skeletons*."
