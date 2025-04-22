@@ -38,6 +38,7 @@ This setup’s portable with $HOME paths, but tailored for thrightguy’s setup.
 
 ## Screenshots
 *Check the X thread for dank visuals!*
+https://x.com/teh_right_guy/status/1914708082925396205
 
 ## Customization
 Built for thrightguy’s WSL2 + RTX 4070 setup. For other systems (e.g., different GPUs, OS), ask @Grok on X to mod it and add *Expanding Brain* or *Drake Hotline Bling* memes!
